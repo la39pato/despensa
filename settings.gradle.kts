@@ -21,3 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "despensa"
 include(":app")
+include(":framework")
+include(":data")
+include(":domain")
+include(":usecases")
