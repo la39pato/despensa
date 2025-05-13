@@ -78,7 +78,7 @@ fun InicioUi(navController : NavController) {
 
             Button(
                 onClick = {
-                    navController.navigate(Screen.LoginScreen.route)
+                    navController.navigate(Screen.ProductosScreen.route)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

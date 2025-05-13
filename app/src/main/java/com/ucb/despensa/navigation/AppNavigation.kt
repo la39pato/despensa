@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ucb.despensa.inicio.InicioUi
+import com.ucb.despensa.productos.AgregarProductoUI
+import com.ucb.despensa.productos.EditarProductoUI
 
 import com.ucb.despensa.signIn.LoginUi
 @Composable
@@ -22,6 +24,7 @@ fun AppNavigation() {
         popEnterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None }
 
+
     ) {
         composable(Screen.InicioScreen.route) {
             InicioUi(navController)
@@ -30,7 +33,10 @@ fun AppNavigation() {
             LoginUi(navController)
         }
         composable(Screen.ProductosScreen.route) {
-            ProductosUI()
+            ProductosUI(navController)
         }
+        composable("editarProducto") { EditarProductoUI(navController) }
+        composable("agregarProducto") { AgregarProductoUI(navController) }
+
     }
 }

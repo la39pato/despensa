@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.ucb.despensa.inicio.InicioUi
 import com.ucb.despensa.ui.theme.DespensaTheme
 import com.ucb.despensa.navigation.AppNavigation
 
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ProductosUI()
+            AppNavigation()
         }
     }
 }

@@ -10,8 +10,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
+import com.ucb.despensa.productos.EditarProductoUI
+
 @Composable
-fun ProductosUI() {
+fun ProductosUI(navController: NavController) {
     val cantProducts = 13
 
     Box(
@@ -54,7 +57,7 @@ fun ProductosUI() {
                                 }
                             )
                             OutlinedButton(
-                                onClick = {},
+                                onClick = { navController.navigate("editarProducto")},
                                 colors = ButtonDefaults.outlinedButtonColors(
                                     containerColor = Color(0xFF00796B),
                                     contentColor = Color.White
@@ -69,11 +72,13 @@ fun ProductosUI() {
                                 contentAlignment = Alignment.Center
                             ){
                                 OutlinedButton(
-                                    modifier = Modifier.padding(bottom=50.dp),                                onClick = {},
+                                    onClick = {navController.navigate("agregarProducto")},
+                                    modifier = Modifier.padding(bottom=50.dp),
                                     colors = ButtonDefaults.outlinedButtonColors(
                                         containerColor = Color(0xFF00796B),
                                         contentColor = Color.White
-                                    )
+                                    ),
+
                                 ) {
                                     Text("Añadir más productos")
                                 }
@@ -91,7 +96,7 @@ fun ProductosUI() {
                 )
                 OutlinedButton(
                     modifier = Modifier.padding(10.dp),
-                    onClick = {},
+                    onClick = {navController.navigate("agregarProducto")},
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = Color(0xFF00796B),
                         contentColor = Color.White
