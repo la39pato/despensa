@@ -2,7 +2,8 @@ package com.ucb.domain
 
 data class Usuario(
     val id: Int = 0,
+    val nombre: String,
     val correo: String,
-    val clave: String, //contraseña
-    val productos: List<Producto>
+    val password: String,
+    val productos: String
 )
