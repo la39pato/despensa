@@ -59,5 +59,21 @@ dependencies {
 
     //Navigation
     implementation(libs.androidx.navigation.compose)
+    implementation (libs.androidx.hilt.navigation.compose)
 
+
+    // Hilt
+    implementation (libs.hilt.android)
+
+    // Hilt ViewModel
+    implementation (libs.androidx.hilt.lifecycle.viewmodel)
+
+    // Room
+    implementation (libs.androidx.room.runtime.v260)
+
+    //Capas
+    implementation(project(":data"))
+    implementation(project(":domain"))
+    implementation(project(":framework"))
+    implementation(project(":usecases"))
 }
