@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ucb.despensa.navigation.Screen
-
 
 @Composable
 fun InicioUi(navController : NavController) {
@@ -75,24 +75,34 @@ fun InicioUi(navController : NavController) {
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-
-            Button(
-                onClick = {
-                    navController.navigate(Screen.InicioScreen.route)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF00796B),
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(12.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text("Comenzar")
-            }
+                Button(
+                    onClick = { navController.navigate(Screen.InicioScreen.route) },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF00796B),
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                ) {
+                    Text("Iniciar Sesión")
+                }
 
-            Spacer(modifier = Modifier.height(40.dp))
+                Button(
+                    onClick = { navController.navigate(Screen.RegistrarScreeen.route) },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF004D40),
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.weight(1f).padding(start = 8.dp)
+                ) {
+                    Text("Registrarse")
+                }
+            }
         }
     }
 }

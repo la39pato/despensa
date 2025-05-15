@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.ucb.data.repository.AuthRepository
 import com.ucb.data.repository.ProductoRepository
-import com.ucb.despensa.R
 import com.ucb.framework.Productos.AppDatabase
 import com.ucb.framework.Productos.ProductDao
 import com.ucb.framework.Productos.ProductRepositoryImpl
@@ -15,6 +14,7 @@ import com.ucb.usecases.Producto.AgregarProducto
 import com.ucb.usecases.Producto.EliminarProducto
 import com.ucb.usecases.Producto.ObtenerProductos
 import com.ucb.usecases.Usuario.IniciarSesion
+import com.ucb.usecases.Usuario.RegistrarUsuario
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -89,5 +89,12 @@ object AppModule {
     fun provideIniciarSesion(repo: AuthRepository): IniciarSesion {
         return IniciarSesion(repo)
     }
+
+    @Provides
+    @Singleton
+    fun provideRegistrarUsuario(repo: AuthRepository): RegistrarUsuario {
+        return RegistrarUsuario(repo)
+    }
+
 
 }
