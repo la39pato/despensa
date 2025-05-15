@@ -4,14 +4,13 @@ import ProductosUI
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ucb.despensa.Registrar.registrarUI
 import com.ucb.despensa.inicio.InicioUi
 import com.ucb.despensa.productos.AgregarProductoUI
 import com.ucb.despensa.productos.EditarProductoUI
-
 import com.ucb.despensa.signIn.LoginUI
 
 @Composable
@@ -37,8 +36,15 @@ fun AppNavigation() {
         composable(Screen.ProductosScreen.route) {
             ProductosUI(navController)
         }
-        composable("editarProducto") { EditarProductoUI(navController) }
-        composable("agregarProducto") { AgregarProductoUI(navController) }
+        composable(Screen.RegistrarScreeen.route) {
+            registrarUI(navController)
+        }
+        composable("editarProducto") {
+            EditarProductoUI(navController)
+        }
+        composable("agregarProducto") {
+            AgregarProductoUI(navController)
+        }
 
     }
 }

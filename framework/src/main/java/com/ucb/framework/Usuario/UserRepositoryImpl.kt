@@ -13,4 +13,13 @@ class UserRepositoryImpl(private val dao: UserDao) : AuthRepository {
             NetworkResult.Error(DataError.Unknown("Usuario o contraseña incorrectos"))
         }
     }
+    override suspend fun registrar(correo: String, password: String): NetworkResult<Boolean> {
+        val exists = dao.getByEmail(correo)
+        return if (exists != null) {
+            NetworkResult.Success(true)
+        } else {
+            NetworkResult.Error(DataError.Unknown("El usuario ya existe"))
+        }
+    }
+
 }
