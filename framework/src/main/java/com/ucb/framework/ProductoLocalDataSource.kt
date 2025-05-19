@@ -28,7 +28,7 @@ class ProductoLocalDataSource(context: Context) : IProductoLocalDataSource {
         }
     }
 
-    override suspend fun eliminar(id: Int): Boolean {
+    override suspend fun eliminar(id: Producto): Boolean {
         return try {
             val productoDB = productDao.getById(id)
             if (productoDB != null) {

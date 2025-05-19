@@ -80,7 +80,7 @@ fun InicioUi(navController : NavController) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = { navController.navigate(Screen.InicioScreen.route) },
+                    onClick = { navController.navigate(Screen.LoginScreen.route) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF00796B),
                         contentColor = Color.White
@@ -92,7 +92,7 @@ fun InicioUi(navController : NavController) {
                 }
 
                 Button(
-                    onClick = { navController.navigate(Screen.RegistrarScreeen.route) },
+                    onClick = { navController.navigate(Screen.RegistrarScreen.route) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF004D40),
                         contentColor = Color.White
