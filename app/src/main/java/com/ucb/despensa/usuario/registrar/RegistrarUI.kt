@@ -45,7 +45,7 @@ fun RegistrarUI(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp)
-            .background(Color(0xFFE0F7FA)),
+            .background(Color(0xFFB2EBF2)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
