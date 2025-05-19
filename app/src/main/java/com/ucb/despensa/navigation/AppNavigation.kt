@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ucb.despensa.usuario.registrar.RegistrarUI
 import com.ucb.despensa.inicio.InicioUi
-import com.ucb.despensa.productos.agregar.AgregarProductoUI
+import com.ucb.despensa.productos.agregar.AgregarUI
 import com.ucb.despensa.usuario.iniciosesion.LoginUI
 
 @Composable
@@ -38,9 +38,8 @@ fun AppNavigation() {
         composable(Screen.RegistrarScreeen.route) {
             RegistrarUI(navController)
         }
-        composable("agregarProducto") {
-            AgregarProductoUI(navController)
+        composable(Screen.AgregarScreen.route) {
+            AgregarUI(navController)
         }
-
     }
 }

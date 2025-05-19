@@ -5,105 +5,123 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.runtime.Composable
+import com.ucb.despensa.navigation.Screen
+
+data class Producto(
+    val nombre: String,
+    val cantidad: Int,
+    val fechaVencimiento: String
+)
 
 @Composable
 fun ProductosUI(navController: NavController) {
-    val cantProducts = 13
+    var productos by remember {
+        mutableStateOf(
+            listOf(
+                Producto("Arroz", 2, "2025-01-15"),
+                Producto("Leche", 1, "2024-12-01"),
+                Producto("Huevos", 12, "2024-11-22")
+            )
+        )
+    }
 
     Box(
-        modifier = Modifier.fillMaxSize().background(
-            Brush.verticalGradient(
-                colors = listOf(Color(0xFFB2EBF2), Color(0xFFE0F7FA))
-            )
-        ),
-        contentAlignment = Alignment.Center
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFB2EBF2))
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 80.dp), // espacio para footer
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
-                text = "MiDespensaApp",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF004D40),
-                modifier = Modifier.padding(20.dp)
+                text = "MiDespensa",
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.padding(40.dp),
+                color = Color(0xFF004D40)
             )
 
-            if (cantProducts > 0) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(cantProducts) { i ->
-                        var cantidad by remember { mutableStateOf(1) }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                items(productos) { producto ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFFA0D5DC).copy(alpha = 0.9f)
+                        ),
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp)
                         ) {
-                            Text(
-                                text = "Producto #${i + 1}",
-                                modifier = Modifier.weight(1f).padding(20.dp)
-                            )
-                            TextField(
-                                modifier = Modifier.width(40.dp),
-                                value = cantidad.toString(),
-                                onValueChange = {
-                                    cantidad = it.toIntOrNull() ?: cantidad
-                                }
-                            )
-                            OutlinedButton(
-                                onClick = { navController.navigate("editarProducto")},
-                                colors = ButtonDefaults.outlinedButtonColors(
-                                    containerColor = Color(0xFF00796B),
-                                    contentColor = Color.White
-                                ),
-                                modifier=Modifier.padding(20.dp)
-                            ) {
-                                Text("Editar")
-                            }
-                        }
-                        if(i==cantProducts-1){
-                            Box(modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ){
-                                OutlinedButton(
-                                    onClick = {navController.navigate("agregarProducto")},
-                                    modifier = Modifier.padding(bottom=50.dp),
-                                    colors = ButtonDefaults.outlinedButtonColors(
-                                        containerColor = Color(0xFF00796B),
-                                        contentColor = Color.White
-                                    ),
-
-                                ) {
-                                    Text("Añadir más productos")
-                                }
-                            }
+                            Text("Nombre: ${producto.nombre}", fontWeight = FontWeight.Bold)
+                            Text("Cantidad: ${producto.cantidad}")
+                            Text("Vence: ${producto.fechaVencimiento}")
                         }
                     }
-
-                }
-
-            } else {
-                Text(
-                    text = "Tu despensa está vacía",
-                    modifier = Modifier,
-                    fontSize = 20.sp
-                )
-                OutlinedButton(
-                    modifier = Modifier.padding(10.dp),
-                    onClick = {navController.navigate("agregarProducto")},
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = Color(0xFF00796B),
-                        contentColor = Color.White
-                    ),
-                ) {
-                    Text("Añadir productos")
                 }
             }
         }
+
+        // Footer con navegación
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .background(Color(0xAAFFFFFF))
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(
+                onClick = { navController.navigate(Screen.AgregarScreen.route) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
+            ) {
+                Text("Agregar")
+            }
+            Button(
+                onClick = { navController.navigate(Screen.EditarScreen.route) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
+            ) {
+                Text("Editar")
+            }
+            Button(
+                onClick = { navController.navigate(Screen.EliminarScreen.route) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
+            ) {
+                Text("Eliminar")
+            }
+        }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun ProductosScreenPreview() {
+    ProductosUI(navController = rememberNavController())
 }

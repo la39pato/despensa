@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun AgregarProductoUI(navController : NavController){
+fun AgregarUI(navController : NavController){
     Box(
         modifier = Modifier.fillMaxSize().background(
             Brush.verticalGradient(
