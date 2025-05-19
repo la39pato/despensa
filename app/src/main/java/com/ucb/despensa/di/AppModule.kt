@@ -1,14 +1,12 @@
 package com.ucb.despensa.di
 
 import android.content.Context
-import androidx.room.Room
+import com.ucb.data.local.IProductoLocalDataSource
+import com.ucb.data.local.IUsuarioLocalDataSource
 import com.ucb.data.repository.AuthRepository
 import com.ucb.data.repository.ProductoRepository
-import com.ucb.framework.Productos.AppDatabase
-import com.ucb.framework.Productos.ProductDao
-import com.ucb.framework.Productos.ProductRepositoryImpl
-import com.ucb.framework.Usuario.UserDao
-import com.ucb.framework.Usuario.UserRepositoryImpl
+import com.ucb.framework.ProductoLocalDataSource
+import com.ucb.framework.UsuarioLocalDataSource
 import com.ucb.usecases.Producto.ActualizarProducto
 import com.ucb.usecases.Producto.AgregarProducto
 import com.ucb.usecases.Producto.EliminarProducto
@@ -22,79 +20,57 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    // --- Local Data Sources ---
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "productos_db"
-        ).build()
+    fun provideProductoLocalDataSource(@ApplicationContext context: Context): IProductoLocalDataSource {
+        return ProductoLocalDataSource(context)
     }
 
     @Provides
     @Singleton
-    fun provideProductDao(db: AppDatabase): ProductDao = db.productDao()
-
+    fun provideUsuarioLocalDataSource(@ApplicationContext context: Context): IUsuarioLocalDataSource {
+        return UsuarioLocalDataSource(context)
+    }
+    // --- Use Cases para Producto ---
     @Provides
     @Singleton
-    fun provideUserDao(db: AppDatabase): UserDao = db.userDao()
-
-    // Repositories
-    @Provides
-    @Singleton
-    fun provideProductoRepository(dao: ProductDao): ProductoRepository {
-        return ProductRepositoryImpl(dao)
+    fun provideAgregarProductoUseCase(repository: ProductoRepository): AgregarProducto {
+        return AgregarProducto(repository)
     }
 
     @Provides
     @Singleton
-    fun provideAuthRepository(dao: UserDao): AuthRepository {
-        return UserRepositoryImpl(dao)
-    }
-
-    // Usecases: Productos
-    @Provides
-    @Singleton
-    fun provideInsertarProducto(repo: ProductoRepository): AgregarProducto {
-        return AgregarProducto(repo)
+    fun provideActualizarProductoUseCase(repository: ProductoRepository): ActualizarProducto {
+        return ActualizarProducto(repository)
     }
 
     @Provides
     @Singleton
-    fun provideObtenerProductos(repo: ProductoRepository): ObtenerProductos {
-        return ObtenerProductos(repo)
+    fun provideEliminarProductoUseCase(repository: ProductoRepository): EliminarProducto {
+        return EliminarProducto(repository)
     }
 
     @Provides
     @Singleton
-    fun provideEliminarProducto(repo: ProductoRepository): EliminarProducto {
-        return EliminarProducto(repo)
+    fun provideObtenerProductosUseCase(repository: ProductoRepository): ObtenerProductos {
+        return ObtenerProductos(repository)
+    }
+
+    // --- Cases para Usuario ---
+    @Provides
+    @Singleton
+    fun provideIniciarSesionUseCase(repository: AuthRepository): IniciarSesion {
+        return IniciarSesion(repository)
     }
 
     @Provides
     @Singleton
-    fun provideActualizarProducto(repo: ProductoRepository): ActualizarProducto {
-        return ActualizarProducto(repo)
+    fun provideRegistrarUsuarioUseCase(repository: AuthRepository): RegistrarUsuario {
+        return RegistrarUsuario(repository)
     }
-
-    // Usecases: Auth
-    @Provides
-    @Singleton
-    fun provideIniciarSesion(repo: AuthRepository): IniciarSesion {
-        return IniciarSesion(repo)
-    }
-
-    @Provides
-    @Singleton
-    fun provideRegistrarUsuario(repo: AuthRepository): RegistrarUsuario {
-        return RegistrarUsuario(repo)
-    }
-
-
 }
