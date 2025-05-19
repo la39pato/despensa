@@ -4,6 +4,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.ucb.domain.Producto
 
 interface ProductDao {
     @Query("SELECT * FROM productos")
@@ -16,6 +17,6 @@ interface ProductDao {
     suspend fun delete(product: ProductDB)
 
     @Query("SELECT * FROM productos WHERE id = :id")
-    suspend fun getById(id: Int): ProductDB?
+    suspend fun getById(id: Producto): ProductDB?
 
 }

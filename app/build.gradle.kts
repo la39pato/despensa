@@ -71,6 +71,9 @@ dependencies {
     // Room
     implementation (libs.androidx.room.runtime.v260)
 
+    implementation (libs.androidx.runtime.livedata)
+
+
     //Capas
     implementation(project(":data"))
     implementation(project(":domain"))

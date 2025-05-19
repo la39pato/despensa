@@ -1,4 +1,7 @@
+package com.ucb.despensa.productos
+
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -22,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import com.ucb.despensa.navigation.Screen
+import androidx.compose.runtime.livedata.observeAsState
 
 data class Producto(
     val nombre: String,
@@ -34,11 +38,46 @@ fun ProductosUI(navController: NavController) {
     var productos by remember {
         mutableStateOf(
             listOf(
-                Producto("Arroz", 2, "2025-01-15"),
-                Producto("Leche", 1, "2024-12-01"),
-                Producto("Huevos", 12, "2024-11-22")
+                Producto("Arroz", 2, "15/01/2025"),
+                Producto("Leche", 1, "16/05/2025"),
+                Producto("Huevos", 12, "14/11/2025")
             )
         )
+    }
+
+    val nuevoProducto = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<Producto>("nuevoProducto")
+        ?.observeAsState()
+
+    val productoEditado = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<Producto>("productoEditado")
+        ?.observeAsState()
+
+    val productoAEliminar = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<Producto>("productoAEliminar")
+        ?.observeAsState()
+
+    // Agregar nuevo producto
+    nuevoProducto?.value?.let {
+        productos = productos + it
+        navController.currentBackStackEntry?.savedStateHandle?.remove<Producto>("nuevoProducto")
+    }
+
+    // Editar producto (reemplaza por nombre)
+    productoEditado?.value?.let { editado ->
+        productos = productos.map {
+            if (it.nombre == editado.nombre) editado else it
+        }
+        navController.currentBackStackEntry?.savedStateHandle?.remove<Producto>("productoEditado")
+    }
+
+    // Eliminar producto
+    productoAEliminar?.value?.let { eliminar ->
+        productos = productos.filterNot { it.nombre == eliminar.nombre }
+        navController.currentBackStackEntry?.savedStateHandle?.remove<Producto>("productoAEliminar")
     }
 
     Box(
@@ -49,14 +88,12 @@ fun ProductosUI(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 80.dp), // espacio para footer
+                .padding(bottom = 80.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "MiDespensa",
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold
-                ),
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(40.dp),
                 color = Color(0xFF004D40)
             )
@@ -70,7 +107,11 @@ fun ProductosUI(navController: NavController) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 8.dp)
+                            .clickable {
+                                // Selecciona producto para editar o eliminar
+                                navController.currentBackStackEntry?.savedStateHandle?.set("selectedProducto", producto)
+                            },
                         colors = CardDefaults.cardColors(
                             containerColor = Color(0xFFA0D5DC).copy(alpha = 0.9f)
                         ),
@@ -104,13 +145,30 @@ fun ProductosUI(navController: NavController) {
                 Text("Agregar")
             }
             Button(
-                onClick = { navController.navigate(Screen.EditarScreen.route) },
+                onClick = {
+                    val producto = navController.currentBackStackEntry
+                        ?.savedStateHandle
+                        ?.get<Producto>("selectedProducto")
+                    if (producto != null) {
+                        navController.navigate(Screen.EditarScreen.route)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
             ) {
                 Text("Editar")
             }
             Button(
-                onClick = { navController.navigate(Screen.EliminarScreen.route) },
+                onClick = {
+                    val producto = navController.currentBackStackEntry
+                        ?.savedStateHandle
+                        ?.get<Producto>("selectedProducto")
+                    if (producto != null) {
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("productoAEliminar", producto)
+                        navController.navigateUp() // Simula volver para que se elimine
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
             ) {
                 Text("Eliminar")
@@ -118,6 +176,7 @@ fun ProductosUI(navController: NavController) {
         }
     }
 }
+
 
 
 @Preview(showBackground = true)
