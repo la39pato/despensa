@@ -1,4 +1,4 @@
-package com.ucb.despensa.productos
+package com.ucb.despensa.productos.agregar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,10 +13,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -27,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun EditarProductoUI(navController : NavController){
+fun AgregarProductoUI(navController : NavController){
     Box(
         modifier = Modifier.fillMaxSize().background(
             Brush.verticalGradient(
@@ -38,7 +34,7 @@ fun EditarProductoUI(navController : NavController){
     ){
         Column(horizontalAlignment = Alignment.CenterHorizontally){
             Text(
-                text = "Editar Producto",
+                text = "Añadir Producto",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF004D40),
@@ -47,9 +43,6 @@ fun EditarProductoUI(navController : NavController){
 
             Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically){
-                var nombre by remember { mutableStateOf("Producto") }
-
-
                 Text(
                     text = "Nombre: ",
                     fontWeight = FontWeight.Bold,
@@ -57,14 +50,13 @@ fun EditarProductoUI(navController : NavController){
                     modifier = Modifier.padding(20.dp)
                 )
                 TextField(
-                    modifier = Modifier.width(40.dp),
-                    value = "_",
-                    onValueChange = {nuevoNombre->nombre=nuevoNombre }
+                    modifier = Modifier.width(100.dp),
+                    value = "",
+                    onValueChange = {}
                 )
             }
             Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically){
-                var cantidad by remember { mutableStateOf("Producto") }
                 Text(
                     text = "Cantidad: ",
                     fontWeight = FontWeight.Bold,
@@ -72,9 +64,9 @@ fun EditarProductoUI(navController : NavController){
                     modifier = Modifier.padding(20.dp)
                 )
                 TextField(
-                    modifier = Modifier.width(40.dp),
-                    value = "Producto",
-                    onValueChange = {nuevaCantidad->cantidad=nuevaCantidad }
+                    modifier = Modifier.width(100.dp),
+                    value = "",
+                    onValueChange = { }
                 )
             }
             OutlinedButton(

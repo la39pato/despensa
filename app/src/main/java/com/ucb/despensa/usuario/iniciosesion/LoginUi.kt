@@ -1,4 +1,4 @@
-package com.ucb.despensa.signIn
+package com.ucb.despensa.usuario.iniciosesion
 
 import androidx.navigation.NavController
 import androidx.compose.foundation.background
