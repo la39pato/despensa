@@ -20,7 +20,7 @@ class ProductoRepository(
         return NetworkResult.Success(localDataSource.obtenerTodos())
     }
 
-    suspend fun eliminar(id: Int): NetworkResult<Unit> {
+    suspend fun eliminar(id: Producto): NetworkResult<Unit> {
         return if (localDataSource.eliminar(id)) {
             NetworkResult.Success(Unit)
         } else {

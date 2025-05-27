@@ -92,7 +92,7 @@ fun InicioUi(navController : NavController) {
                 }
 
                 Button(
-                    onClick = { navController.navigate(Screen.RegistrarScreeen.route) },
+                    onClick = { navController.navigate(Screen.RegistrarScreen.route) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF004D40),
                         contentColor = Color.White

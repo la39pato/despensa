@@ -17,6 +17,7 @@ jetbrainsKotlinJvm = "2.0.21"
 navigationCompose = "2.9.0"
 roomRuntime = "2.6.1"
 roomRuntimeVersion = "2.6.0"
+runtimeLivedataVersion = "1.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -26,6 +27,7 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-room-runtime-v260 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
+androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedataVersion" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
