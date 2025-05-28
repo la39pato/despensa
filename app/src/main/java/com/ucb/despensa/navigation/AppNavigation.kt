@@ -1,6 +1,5 @@
 package com.ucb.despensa.navigation
 
-import android.util.Log
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
