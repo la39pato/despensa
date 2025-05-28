@@ -73,6 +73,9 @@ dependencies {
 
     implementation (libs.androidx.runtime.livedata)
 
+    //paralice
+    implementation (libs.core.ktx.v1101)
+    implementation (libs.kotlin.stdlib)
 
     //Capas
     implementation(project(":data"))
