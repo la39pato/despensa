@@ -30,16 +30,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-
-data class Producto(
-    val nombre: String,
-    val cantidad: Int,
-    val fechaVencimiento: String
-)
+import com.ucb.despensa.productos.ProductosViewModel
+import com.ucb.despensa.productos.Producto
 
 @Composable
 fun AgregarUI(
-    navController: NavController
+    navController: NavController,
+    viewModel: ProductosViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
     var nombre by remember { mutableStateOf("") }
     var cantidad by remember { mutableStateOf("") }
@@ -55,11 +52,9 @@ fun AgregarUI(
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
-
         ) {
             Text(
                 text = "Agregar Producto",
@@ -77,8 +72,6 @@ fun AgregarUI(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
             OutlinedTextField(
                 value = cantidad,
                 onValueChange = { cantidad = it },
@@ -87,8 +80,6 @@ fun AgregarUI(
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = fecha,
@@ -99,15 +90,11 @@ fun AgregarUI(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
-
             Button(
                 onClick = {
                     if (nombre.isNotBlank() && cantidad.isNotBlank() && fecha.isNotBlank()) {
                         val producto = Producto(nombre, cantidad.toIntOrNull() ?: 0, fecha)
-                        navController.previousBackStackEntry
-                            ?.savedStateHandle
-                            ?.set("nuevoProducto", producto)
+                        viewModel.agregarProducto(producto)
                         navController.popBackStack()
                     } else {
                         Toast.makeText(context, "Completa todos los campos", Toast.LENGTH_SHORT).show()

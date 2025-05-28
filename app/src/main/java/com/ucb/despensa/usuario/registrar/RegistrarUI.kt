@@ -91,5 +91,3 @@ fun RegistrarUI(
 fun RegistrarUIPreview() {
     RegistrarUI(navController = NavHostController(LocalContext.current))
 }
-
-
