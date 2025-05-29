@@ -22,7 +22,7 @@ fun AppNavigation() {
     val viewModel: ProductosViewModel = viewModel()
     NavHost(
         navController = navController,
-        startDestination = Screen.InicioScreen.route,
+        startDestination = Screen.ProductosScreen.route,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
@@ -55,7 +55,7 @@ fun AppNavigation() {
             ActualizarUI(navController)
         }
         composable(Screen.EliminarScreen.route) {
-            EliminarUI(navController)
+            EliminarUI(navController, viewModel)
         }
     }
 }
