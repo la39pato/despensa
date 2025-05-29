@@ -1,9 +1,7 @@
 package com.ucb.despensa.usuario.registrar
 
 import androidx.compose.foundation.background
-import androidx.navigation.NavController
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,9 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,44 +41,70 @@ fun RegistrarUI(
     onRegistroExitoso: (Usuario) -> Unit = {}
 ) {
     var correo by remember { mutableStateOf("") }
-    var contraseña by remember { mutableStateOf("") }
+    var contrasena by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .background(Color(0xFFB2EBF2))
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Text("Registrar", fontSize = 24.sp)
-        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Registrate",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF004D40),
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
 
         OutlinedTextField(
             value = correo,
             onValueChange = { correo = it },
-            label = { Text("Correo") }
+            label = { Text("Correo electrónico") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
         )
 
+        Spacer(modifier = Modifier.height(12.dp))
+
         OutlinedTextField(
-            value = contraseña,
-            onValueChange = { contraseña = it },
+            value = contrasena,
+            onValueChange = { contrasena = it },
             label = { Text("Contraseña") },
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
         )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = {
+                val usuario = Usuario(correo = correo, contrasena = contrasena)
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("usuarioRegistrado", usuario)
+
+                navController.navigate(Screen.LoginScreen.route) {
+                    popUpTo(Screen.RegistrarScreen.route) { inclusive = true }
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
+        ) {
+            Text("Registrar", color = Color.White)
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = {
-            val usuario = Usuario(correo, contraseña)
-            // Guardar en la SavedStateHandle del backstack
-            navController.previousBackStackEntry
-                ?.savedStateHandle
-                ?.set("usuarioRegistrado", usuario)
-
-            // Ir al Login y quitar la pantalla actual
-            navController.navigate(Screen.LoginScreen.route) {
-                popUpTo(Screen.RegistrarScreen.route) { inclusive = true }
-            }
+        TextButton(onClick = {
+            navController.navigate(Screen.LoginScreen.route)
         }) {
-            Text("Registrar")
+            Text("¿Ya tienes cuenta? Inicia sesión")
         }
     }
 }

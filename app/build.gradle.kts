@@ -9,7 +9,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.ucb.despensa"
+        applicationId = "com.ucb.despensaApp"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
