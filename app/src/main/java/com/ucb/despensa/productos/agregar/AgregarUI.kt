@@ -32,11 +32,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ucb.despensa.productos.ProductosViewModel
 import com.ucb.despensa.productos.Producto
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun AgregarUI(
     navController: NavController,
-    viewModel: ProductosViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: ProductosViewModel = viewModel()
 ) {
     var nombre by remember { mutableStateOf("") }
     var cantidad by remember { mutableStateOf("") }
@@ -62,6 +63,13 @@ fun AgregarUI(
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF004D40),
                 modifier = Modifier.padding(bottom = 24.dp)
+            )
+
+            Text(
+                text = "Agrega Productos a tu inventario:",
+                fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                color = Color.DarkGray,
+                modifier = Modifier.padding(bottom = 5.dp)
             )
 
             OutlinedTextField(

@@ -126,6 +126,17 @@ fun LoginUI(navController: NavHostController) {
         }) {
             Text("¿No tienes cuenta? Regístrate aquí")
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = "Usuarios disponibles:\n" +
+                    "• nataly@gmail.com / 12345\n" +
+                    "• daniela@gmail.com / 1234\n" +
+                    "• camila@gmail.com / 123",
+            fontSize = 12.sp,
+            color = Color.Gray
+        )
     }
 }
 

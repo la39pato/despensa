@@ -99,6 +99,12 @@ fun ProductosUI(
             ) {
                 Text("Eliminar")
             }
+            Button(
+                onClick = { navController.navigate(Screen.EditarScreen.route) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
+            ) {
+                Text("Editar")
+            }
         }
     }
 }
