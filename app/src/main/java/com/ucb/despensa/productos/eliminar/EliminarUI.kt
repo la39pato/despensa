@@ -43,15 +43,25 @@ fun EliminarUI(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFE0F7FA))
+            .background(Color(0xFFB2EBF2))
             .padding(16.dp)
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 80.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
                 text = "Eliminar Productos",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF004D40),
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(40.dp),
+                color = Color(0xFF004D40)
+            )
+            Text(
+                text = "Elimine el Producto que ya no desee que este en su inventario:",
+                fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                color = Color.DarkGray,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 

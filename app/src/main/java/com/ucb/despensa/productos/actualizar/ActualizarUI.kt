@@ -1,131 +1,102 @@
 package com.ucb.despensa.productos.actualizar
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.runtime.setValue
-import com.ucb.despensa.navigation.Screen
-import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.ucb.despensa.productos.eliminar.EliminarUI
-
-data class Producto(
-    val nombre: String,
-    val cantidad: Int,
-    val fechaVencimiento: String
-)
+import com.ucb.despensa.productos.Producto
+import com.ucb.despensa.productos.ProductosViewModel
 
 @Composable
-fun ActualizarUI(navController: NavController) {
-    // Simula la lista recuperada, normalmente la pasas o la recuperas del navController
-    var productos: List<Producto> by remember {
-        mutableStateOf(
-            listOf()
-        )
-    }
+fun ActualizarUI(
+    navController: NavController,
+    viewModel: ProductosViewModel = viewModel()
+) {
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val productoParaEditar = savedStateHandle?.get<Producto>("productoParaEditar")
+
+    var nombre by remember { mutableStateOf(TextFieldValue(productoParaEditar?.nombre ?: "")) }
+    var cantidad by remember { mutableStateOf(TextFieldValue(productoParaEditar?.cantidad?.toString() ?: "")) }
+    var fecha by remember { mutableStateOf(TextFieldValue(productoParaEditar?.fechaVencimiento ?: "")) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFB2EBF2))
-            .padding(16.dp)
+            .padding(40.dp),
+        contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "Editar Productos",
-                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                text = "Editar Producto",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
                 color = Color(0xFF004D40),
                 modifier = Modifier.padding(bottom = 24.dp)
             )
+            Text(
+                text = "Ingrese el producto que desea editar:",
+                fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                color = Color.DarkGray,
+                modifier = Modifier.padding(bottom = 5.dp)
+            )
 
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                items(productos) { producto ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFFA0D5DC).copy(alpha = 0.9f)
-                        ),
-                        elevation = CardDefaults.cardElevation(4.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
-                                Text("Nombre: ${producto.nombre}", fontWeight = FontWeight.Bold)
-                                Text("Cantidad: ${producto.cantidad}")
-                                Text("Vence: ${producto.fechaVencimiento}")
-                            }
-                            IconButton(
-                                onClick = {
-                                    // Navega a la pantalla de edición pasando el producto seleccionado
-                                    navController.currentBackStackEntry?.savedStateHandle?.set("productoParaEditar", producto)
-                                    navController.navigate(Screen.EditarScreen.route)
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = "Editar producto",
-                                    tint = Color(0xFF00796B)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(30.dp))
+            OutlinedTextField(
+                value = nombre,
+                onValueChange = { nombre = it },
+                label = { Text("Nombre") },
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            )
+
+            OutlinedTextField(
+                value = cantidad,
+                onValueChange = { cantidad = it },
+                label = { Text("Cantidad") },
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            )
+
+            OutlinedTextField(
+                value = fecha,
+                onValueChange = { fecha = it },
+                label = { Text("Fecha de Vencimiento") },
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+            )
 
             Button(
                 onClick = {
-                    navController.navigate(Screen.ProductosScreen.route) {
-                        popUpTo(Screen.EliminarScreen.route) { inclusive = true }
-                    }
+                    val productoEditado = Producto(
+                        nombre.text,
+                        cantidad.text.toIntOrNull() ?: 0,
+                        fecha.text
+                    )
+                    viewModel.editarProducto(productoEditado)
+                    navController.popBackStack()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B)),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Volver a Productos", color = Color.White)
+                Text("Guardar Cambios", color = Color.White)
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun ActualizarPreview() {
+@Preview(showBackground = true)
+fun ProductosPreview() {
     ActualizarUI(navController = rememberNavController())
 }
