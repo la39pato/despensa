@@ -14,10 +14,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,25 +29,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import com.ucb.despensa.navigation.Screen
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.ucb.despensa.productos.ProductosViewModel
 
-
-object ProductosData {
-    val productos = mutableListOf<Producto>()
-}
-
-data class Producto(
-    val nombre: String,
-    val cantidad: Int,
-    val fechaVencimiento: String
-)
 @Composable
 fun EliminarUI(
-    navController: NavController
+    navController: NavController,
+    viewModel: ProductosViewModel = viewModel()
 ) {
-    var productos by remember {
-        mutableStateOf(ProductosData.productos.toList())
-    }
+    val productos = viewModel.productos
 
     Box(
         modifier = Modifier
@@ -72,7 +59,7 @@ fun EliminarUI(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.weight(1f)
             ) {
-                items(productos) { producto ->
+                items(productos, key = { it.nombre }) { producto ->
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -87,8 +74,7 @@ fun EliminarUI(
 
                         IconButton(
                             onClick = {
-                                ProductosData.productos.remove(producto)
-                                productos = ProductosData.productos.toList()
+                                viewModel.eliminarProducto(producto)
                             },
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
@@ -122,6 +108,7 @@ fun EliminarUI(
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
