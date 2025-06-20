@@ -112,7 +112,11 @@ fun RegistrarUI(
 
         Button(
             onClick = {
-                registrarViewModel.registrar(correo, contrasena)  // 👈 AHORA SÍ USA EL VIEWMODEL
+                if (contrasena.length < 6) {
+                    Toast.makeText(context, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
+                } else {
+                    registrarViewModel.registrar(correo, contrasena)
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
