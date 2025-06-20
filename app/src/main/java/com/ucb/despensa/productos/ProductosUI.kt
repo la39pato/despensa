@@ -4,6 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,12 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.ucb.despensa.navigation.Screen
-import java.io.Serializable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ucb.domain.Producto
+import java.io.Serializable
 
 /*
 data class Producto(
@@ -26,8 +30,9 @@ data class Producto(
     val fechaVencimiento: String
 ) : Serializable
 */
+
 @Composable
-fun ProductoItem(producto: Producto) {
+fun ProductoItem(producto: Producto, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -37,10 +42,27 @@ fun ProductoItem(producto: Producto) {
         ),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("Nombre: ${producto.nombre}", fontWeight = FontWeight.Bold)
-            Text("Cantidad: ${producto.cantidad}")
-            Text("Vence: ${producto.fechaVencimiento}")
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Nombre: ${producto.nombre}", fontWeight = FontWeight.Bold)
+                Text("Cantidad: ${producto.cantidad}")
+                Text("Vence: ${producto.fechaVencimiento}")
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(
+                    onClick = { navController.navigate(Screen.EditarScreen.route) },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Editar",
+                        tint = Color.Red
+                    )
+                }
+            }
         }
     }
 }
@@ -54,7 +76,7 @@ fun ProductosUI(
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxHeight(0.95f)
             .background(Color(0xFFB2EBF2))
     ) {
         Column(
@@ -76,38 +98,30 @@ fun ProductosUI(
                     .padding(horizontal = 16.dp)
             ) {
                 items(productos, key = { it.nombre }) { producto ->
-                    ProductoItem(producto)
+                    ProductoItem(producto, navController)
                 }
             }
         }
-
         Row(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .background(Color(0xAAFFFFFF))
+                .align(Alignment.BottomEnd)
                 .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ){
+            FloatingActionButton(
                 onClick = { navController.navigate(Screen.AgregarScreen.route) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
+                containerColor = Color(0xFF00796B)
             ) {
-                Text("Agregar")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Agregar", tint=Color.White)
             }
-            Button(
+            FloatingActionButton(
                 onClick = { navController.navigate(Screen.EliminarScreen.route) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
+                containerColor = Color(0xFF00796B)
             ) {
-                Text("Eliminar")
-            }
-            Button(
-                onClick = { navController.navigate(Screen.EditarScreen.route) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B))
-            ) {
-                Text("Editar")
+                Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar", tint=Color.White)
             }
         }
+
     }
 }
 
