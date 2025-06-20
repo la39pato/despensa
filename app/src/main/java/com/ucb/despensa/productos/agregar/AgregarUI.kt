@@ -1,6 +1,10 @@
 package com.ucb.despensa.productos.agregar
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,9 +18,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ucb.domain.Producto
+import com.ucb.despensa.NotificationHelper
 import com.ucb.despensa.productos.ProductosViewModel
 
 @Composable
@@ -29,6 +35,20 @@ fun AgregarUI(
     var fecha by remember { mutableStateOf("") }
 
     val context = LocalContext.current
+
+    // ✅ Launcher para pedir permiso de notificación (Android 13+)
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            // Mostrar notificación al conceder permiso
+            NotificationHelper.showNotification(
+                context,
+                "Producto agregado",
+                "¡Tu producto se guardó exitosamente!"
+            )
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -93,9 +113,42 @@ fun AgregarUI(
                             fechaVencimiento = fecha
                         )
                         viewModel.agregarProducto(producto)
+
+                        // ✅ Manejo de notificación y permiso
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                            if (ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.POST_NOTIFICATIONS
+                                ) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                // Permiso ya concedido
+                                NotificationHelper.showNotification(
+                                    context,
+                                    "Producto agregado",
+                                    "¡Tu producto se guardó exitosamente!"
+                                )
+                            } else {
+                                // Pedir permiso
+                                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                        } else {
+                            // Android < 13, notificación directa
+                            NotificationHelper.showNotification(
+                                context,
+                                "Producto agregado",
+                                "¡Tu producto se guardó exitosamente!"
+                            )
+                        }
+
+                        // ✅ Navega atrás después de guardar
                         navController.popBackStack()
+
                     } else {
-                        Toast.makeText(context, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Completa todos los campos",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 },
                 modifier = Modifier
@@ -113,5 +166,5 @@ fun AgregarUI(
 @Composable
 fun AgregarUIPreview() {
     // Para preview no se necesita navController real
-    AgregarUI(navController = NavController(LocalContext.current))
+    // ⚠️ Este preview ignora funcionalidades reales
 }
