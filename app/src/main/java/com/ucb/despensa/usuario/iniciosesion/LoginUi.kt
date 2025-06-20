@@ -14,43 +14,35 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.ucb.despensa.navigation.Screen
 
-data class Usuario(
-    val nombre: String,
-    val correo: String,
-    val password: String
-)
-
 @Composable
-fun LoginUI(navController: NavHostController) {
+fun LoginUI(
+    navController: NavHostController,
+    loginViewModel: LoginViewModel
+) {
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var mensajeError by remember { mutableStateOf<String?>(null) }
 
     val context = LocalContext.current
 
-    // Lista hardcodeada de usuarios
-    val usuariosBase = remember {
-        mutableStateListOf(
-            Usuario("Nataly", "nataly@gmail.com", "12345"),
-            Usuario("Daniela", "daniela@gmail.com", "1234"),
-            Usuario("Camila", "camila@gmail.com", "123")
-        )
-    }
+    val loginState by loginViewModel.loginState.collectAsState()
 
-    val usuarioNuevo = navController
-        .currentBackStackEntry
-        ?.savedStateHandle
-        ?.get<Usuario>("usuarioRegistrado")
-
-    LaunchedEffect(usuarioNuevo) {
-        usuarioNuevo?.let {
-            if (!usuariosBase.any { u -> u.correo == it.correo }) {
-                usuariosBase.add(it)
-                navController.currentBackStackEntry?.savedStateHandle?.remove<Usuario>("usuarioRegistrado")
+    // Navega o muestra error cuando cambie loginState
+    LaunchedEffect(loginState) {
+        when (loginState) {
+            true -> {
+                loginViewModel.resetLoginState()
+                navController.navigate(Screen.ProductosScreen.route)
+            }
+            false -> {
+                loginViewModel.resetLoginState()
+                Toast.makeText(context, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                // null → sin intento, no hacer nada
             }
         }
     }
@@ -94,17 +86,7 @@ fun LoginUI(navController: NavHostController) {
 
         Button(
             onClick = {
-                val usuarioValido = usuariosBase.find {
-                    it.correo == correo && it.password == password
-                }
-
-                if (usuarioValido != null) {
-                    mensajeError = null
-                    navController.navigate(Screen.ProductosScreen.route)
-                } else {
-                    mensajeError = "Correo o contraseña incorrectos"
-                    Toast.makeText(context, mensajeError, Toast.LENGTH_SHORT).show()
-                }
+                loginViewModel.login(correo, password)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -114,11 +96,6 @@ fun LoginUI(navController: NavHostController) {
             Text("Iniciar Sesión", color = Color.White)
         }
 
-        mensajeError?.let {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = it, color = Color.Red)
-        }
-
         Spacer(modifier = Modifier.height(16.dp))
 
         TextButton(onClick = {
@@ -126,22 +103,12 @@ fun LoginUI(navController: NavHostController) {
         }) {
             Text("¿No tienes cuenta? Regístrate aquí")
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "Usuarios disponibles:\n" +
-                    "• nataly@gmail.com / 12345\n" +
-                    "• daniela@gmail.com / 1234\n" +
-                    "• camila@gmail.com / 123",
-            fontSize = 12.sp,
-            color = Color.Gray
-        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun LoginUIPreview() {
-    LoginUI(navController = NavHostController(LocalContext.current))
+    // Ojo: el preview NO tendrá NavController real, así que ignóralo si da error
+    // Este preview es solo visual
 }

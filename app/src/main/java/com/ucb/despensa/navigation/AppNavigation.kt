@@ -15,11 +15,16 @@ import com.ucb.despensa.productos.agregar.AgregarUI
 import com.ucb.despensa.productos.eliminar.EliminarUI
 import com.ucb.despensa.productos.actualizar.ActualizarUI
 import com.ucb.despensa.usuario.iniciosesion.LoginUI
+import com.ucb.despensa.usuario.iniciosesion.LoginViewModel
+import com.ucb.despensa.usuario.registrar.RegistrarViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(  loginViewModel: LoginViewModel, registrarViewModel: RegistrarViewModel) {
     val navController = rememberNavController()
     val viewModel: ProductosViewModel = viewModel()
+   // val registrarViewModel: RegistrarViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = Screen.InicioScreen.route,
@@ -34,20 +39,19 @@ fun AppNavigation() {
             InicioUi(navController)
         }
         composable(Screen.LoginScreen.route) {
-            LoginUI(navController)
+            LoginUI(    navController = navController,
+                loginViewModel = loginViewModel)
         }
         composable(Screen.ProductosScreen.route) {
             ProductosUI(navController, viewModel)
         }
         composable(Screen.RegistrarScreen.route) {
-            RegistrarUI(navController = navController)
-            { nuevoUsuario ->
-                navController.previousBackStackEntry
-                    ?.savedStateHandle
-                    ?.set("usuarioRegistrado", nuevoUsuario)
-                navController.popBackStack()
-            }
+            RegistrarUI(
+                navController = navController,
+                registrarViewModel = registrarViewModel // ✅ Ahora lo pasas correctamente
+            )
         }
+
         composable(Screen.AgregarScreen.route) {
             AgregarUI(navController, viewModel)
         }

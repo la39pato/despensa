@@ -1,11 +1,13 @@
 package com.ucb.despensa.di
 
 import android.content.Context
+import com.google.firebase.auth.FirebaseAuth
 import com.ucb.data.local.IProductoLocalDataSource
 import com.ucb.data.local.IUsuarioLocalDataSource
-import com.ucb.data.repository.AuthRepository
+import com.ucb.data.repository.IAuthRepository
 import com.ucb.data.repository.ProductoRepository
 import com.ucb.framework.ProductoLocalDataSource
+import com.ucb.framework.Usuario.AuthRepository
 import com.ucb.framework.UsuarioLocalDataSource
 import com.ucb.usecases.Producto.ActualizarProducto
 import com.ucb.usecases.Producto.AgregarProducto
@@ -64,13 +66,11 @@ object AppModule {
     // --- Cases para Usuario ---
     @Provides
     @Singleton
-    fun provideIniciarSesionUseCase(repository: AuthRepository): IniciarSesion {
-        return IniciarSesion(repository)
-    }
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Provides
     @Singleton
-    fun provideRegistrarUsuarioUseCase(repository: AuthRepository): RegistrarUsuario {
-        return RegistrarUsuario(repository)
+    fun provideAuthRepository(auth: FirebaseAuth): IAuthRepository {
+        return AuthRepository(auth)
     }
 }

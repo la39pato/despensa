@@ -16,8 +16,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val firebaseAuth = com.google.firebase.auth.FirebaseAuth.getInstance()
+        val authRepository = com.ucb.framework.Usuario.AuthRepository(firebaseAuth)
+        val iniciarSesion = com.ucb.usecases.Usuario.IniciarSesion(authRepository)
+        val loginViewModel = com.ucb.despensa.usuario.iniciosesion.LoginViewModel(iniciarSesion)
+        val registrarUsuario = com.ucb.usecases.Usuario.RegistrarUsuario(authRepository)
+        val signUpViewModel = com.ucb.despensa.usuario.registrar.RegistrarViewModel(registrarUsuario)
         setContent {
-            AppNavigation()
+            AppNavigation(loginViewModel, signUpViewModel)
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.ucb.despensa.usuario.registrar
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,14 +37,41 @@ data class Usuario(
     val correo: String,
     val contrasena: String
 )
-
 @Composable
 fun RegistrarUI(
     navController: NavHostController,
-    onRegistroExitoso: (Usuario) -> Unit = {}
+    registrarViewModel: RegistrarViewModel  // 👈 AGREGA el ViewModel como parámetro
 ) {
+    val context = LocalContext.current
+
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
+
+    // Observa el resultado
+    val registroExitoso by registrarViewModel.registroExitoso.collectAsState()
+    val errorMessage by registrarViewModel.errorMessage.collectAsState()
+
+    // Si registro exitoso: guarda correo y navega
+    LaunchedEffect(registroExitoso) {
+        if (registroExitoso == true) {
+            navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.set("usuarioRegistradoCorreo", correo)
+
+            navController.navigate(Screen.LoginScreen.route) {
+                popUpTo(Screen.RegistrarScreen.route) { inclusive = true }
+            }
+
+            registrarViewModel.resetRegistroState()
+        }
+    }
+
+    // Si error: muestra Toast
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -52,7 +82,7 @@ fun RegistrarUI(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Registrate",
+            text = "Regístrate",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF004D40),
@@ -82,14 +112,7 @@ fun RegistrarUI(
 
         Button(
             onClick = {
-                val usuario = Usuario(correo = correo, contrasena = contrasena)
-                navController.previousBackStackEntry
-                    ?.savedStateHandle
-                    ?.set("usuarioRegistrado", usuario)
-
-                navController.navigate(Screen.LoginScreen.route) {
-                    popUpTo(Screen.RegistrarScreen.route) { inclusive = true }
-                }
+                registrarViewModel.registrar(correo, contrasena)  // 👈 AHORA SÍ USA EL VIEWMODEL
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -107,11 +130,4 @@ fun RegistrarUI(
             Text("¿Ya tienes cuenta? Inicia sesión")
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun RegistrarUIPreview() {
-    RegistrarUI(navController = NavHostController(LocalContext.current))
 }

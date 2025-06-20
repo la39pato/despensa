@@ -12,6 +12,7 @@ kotlin {
     }
 }
 dependencies {
+    //implementation(libs.hilt.android)
     implementation(project(":data"))
     implementation(project(":domain"))
 }
