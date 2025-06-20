@@ -20,6 +20,11 @@ navigationCompose = "2.9.0"
 roomRuntime = "2.6.1"
 roomRuntimeVersion = "2.6.0"
 runtimeLivedataVersion = "1.6.0"
+#Firebase
+firebaseBom= "33.1.1"
+services= "4.4.2"
+crashlytics= "3.0.2"
+firebaseAuthKtx = "23.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,10 +54,18 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
+#firebase
+firebase-bom= {module = "com.google.firebase:firebase-bom", version.ref= "firebaseBom" }
+firebase-crashlytics = {module= "com.google.firebase:firebase-crashlytics"}
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
-
+#ggogleservice
+googleServices = {id = "com.google.gms.google-services", version.ref= "services"}
+#firebase
+crashlytics = {id= "com.google.firebase.crashlytics", version.ref = "crashlytics"}

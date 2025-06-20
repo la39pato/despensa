@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1082021763152",
+    "project_id": "despensaapp-30b7c",
+    "storage_bucket": "despensaapp-30b7c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082021763152:android:d39deb05648b2ec21d5955",
+        "android_client_info": {
+          "package_name": "com.ucb.despensaApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB676b0k6HZMF_mFviCWhCrUELyIaL7dWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
