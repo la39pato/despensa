@@ -17,13 +17,15 @@ import androidx.navigation.compose.rememberNavController
 import com.ucb.despensa.navigation.Screen
 import java.io.Serializable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ucb.domain.Producto
 
+/*
 data class Producto(
     val nombre: String,
     val cantidad: Int,
     val fechaVencimiento: String
 ) : Serializable
-
+*/
 @Composable
 fun ProductoItem(producto: Producto) {
     Card(

@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.ucb.despensa.productos.Producto
+import com.ucb.domain.Producto
 import com.ucb.despensa.productos.ProductosViewModel
 
 @Composable
@@ -79,9 +79,10 @@ fun ActualizarUI(
             Button(
                 onClick = {
                     val productoEditado = Producto(
-                        nombre.text,
-                        cantidad.text.toIntOrNull() ?: 0,
-                        fecha.text
+                        id = productoParaEditar?.id ?: "", // Pasa el ID!
+                        nombre = nombre.text,
+                        cantidad = cantidad.text.toIntOrNull() ?: 0,
+                        fechaVencimiento = fecha.text
                     )
                     viewModel.editarProducto(productoEditado)
                     navController.popBackStack()
@@ -95,8 +96,8 @@ fun ActualizarUI(
     }
 }
 
-@Composable
 @Preview(showBackground = true)
+@Composable
 fun ProductosPreview() {
     ActualizarUI(navController = rememberNavController())
 }

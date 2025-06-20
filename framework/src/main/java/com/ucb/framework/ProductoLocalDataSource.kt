@@ -2,11 +2,10 @@ package com.ucb.framework
 
 import android.content.Context
 import com.ucb.data.local.IProductoLocalDataSource
-import com.ucb.framework.Productos.toEntity
-import com.ucb.framework.Productos.toModelList
+
 import com.ucb.domain.Producto
 import com.ucb.framework.Productos.ProductDao
-
+/*
 class ProductoLocalDataSource(context: Context) : IProductoLocalDataSource {
 
     private val productDao: ProductDao = AppRoomDatabase.getDatabase(context).productDao()
@@ -51,3 +50,4 @@ class ProductoLocalDataSource(context: Context) : IProductoLocalDataSource {
         }
     }
 }
+*/

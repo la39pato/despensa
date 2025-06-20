@@ -1,71 +1,65 @@
 package com.ucb.despensa.productos
 
-import androidx.lifecycle.viewModelScope
-import com.ucb.data.utils.NetworkResult
-//import com.ucb.domain.Producto
-import com.ucb.usecases.Producto.ObtenerProductos
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ucb.domain.Producto
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.ucb.framework.ProductoRepositoryFirestore
 
 class ProductosViewModel : ViewModel() {
+
+    // ✅ Lista observable compatible con tu UI actual
     private val _productos = mutableStateListOf<Producto>()
+    val productos: SnapshotStateList<Producto> = _productos
 
-    val productos: List<Producto> = _productos
-
-    init {
-        _productos.addAll(
-            listOf(
-                Producto("Arroz", 2, "15/01/2025"),
-                Producto("Leche", 1, "16/05/2025"),
-                Producto("Huevos", 12, "14/11/2025")
-            )
-        )
-    }
-
-    fun agregarProducto(producto: Producto) {
-        _productos.add(producto)
-    }
-
-    fun editarProducto(productoEditado: Producto) {
-        val index = _productos.indexOfFirst { it.nombre == productoEditado.nombre }
-        if (index != -1) {
-            _productos[index] = productoEditado
-        }
-    }
-
-    fun eliminarProducto(productoAEliminar: Producto) {
-        _productos.removeAll { it.nombre == productoAEliminar.nombre }
-    }
-}
-
-/*
-@HiltViewModel
-class ProductosViewModel @Inject constructor(
-    private val obtenerProductos: ObtenerProductos
-) : ViewModel() {
-
-    private val _productos = MutableStateFlow<List<Producto>>(emptyList())
-    val productos: StateFlow<List<Producto>> = _productos
-
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error
+    // ✅ Repo Firestore real (instanciado manualmente)
+    private val repo = ProductoRepositoryFirestore()
 
     init {
         cargarProductos()
     }
 
+    // ✅ Cargar productos desde Firestore
     fun cargarProductos() {
         viewModelScope.launch {
-            when (val result = obtenerProductos()) {
-                is NetworkResult.Success -> _productos.value = result.data
-                is NetworkResult.Error -> _error.value = result.error
+            val lista = repo.obtenerProductos()
+            _productos.clear()
+            _productos.addAll(lista)
+        }
+    }
+
+    // ✅ Agregar producto a Firestore y refrescar lista
+    fun agregarProducto(producto: Producto) {
+        Log.d("REPO", "Agregando producto: $producto")
+
+        viewModelScope.launch {
+            val exito = repo.agregarProducto(producto)
+            if (exito) {
+                cargarProductos()
             }
         }
     }
-}*/
+
+    // ✅ Editar producto en Firestore y refrescar lista
+    fun editarProducto(productoEditado: Producto) {
+        viewModelScope.launch {
+            val exito = repo.actualizarProducto(productoEditado)
+            if (exito) {
+                cargarProductos()
+            }
+        }
+    }
+
+    // ✅ Eliminar producto en Firestore y refrescar lista
+    fun eliminarProducto(productoAEliminar: Producto) {
+        viewModelScope.launch {
+            val exito = repo.eliminarProducto(productoAEliminar.id)
+            if (exito) {
+                cargarProductos()
+            }
+        }
+    }
+}

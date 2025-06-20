@@ -1,18 +1,13 @@
 package com.ucb.despensa.productos.eliminar
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,17 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.*
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import com.ucb.despensa.navigation.Screen
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.ucb.despensa.navigation.Screen
 import com.ucb.despensa.productos.ProductosViewModel
 
 @Composable
@@ -59,7 +47,7 @@ fun EliminarUI(
                 color = Color(0xFF004D40)
             )
             Text(
-                text = "Elimine el Producto que ya no desee que este en su inventario:",
+                text = "Elimine el Producto que ya no desee que esté en su inventario:",
                 fontSize = MaterialTheme.typography.bodySmall.fontSize,
                 color = Color.DarkGray,
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -69,7 +57,7 @@ fun EliminarUI(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.weight(1f)
             ) {
-                items(productos, key = { it.nombre }) { producto ->
+                items(productos, key = { it.id }) { producto ->  // ✅ Usa el ID como key
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -118,7 +106,6 @@ fun EliminarUI(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
