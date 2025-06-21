@@ -50,19 +50,19 @@ fun ProductoItem(producto: Producto, navController: NavController) {
                 Text("Nombre: ${producto.nombre}", fontWeight = FontWeight.Bold)
                 Text("Cantidad: ${producto.cantidad}")
                 Text("Vence: ${producto.fechaVencimiento}")
-            }
+            }/*
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(
                     onClick = { navController.navigate(Screen.EditarScreen.route) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
-                ) {
+                ) {/*
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Editar",
                         tint = Color.Red
-                    )
+                    )*/
                 }
-            }
+            }*/
         }
     }
 }
