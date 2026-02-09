@@ -22,6 +22,7 @@ fun ActualizarUI(
     navController: NavController,
     viewModel: ProductosViewModel = viewModel()
 ) {
+    //practica de git
     val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
     val productoParaEditar = savedStateHandle?.get<Producto>("productoParaEditar")
 
